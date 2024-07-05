@@ -1,32 +1,26 @@
 #!/usr/bin/python3
-"""
-Returns the number of subscribers from a subreddit
-"""
+'''
+Returns the number of subscribers for a give subrddit
+'''
 import requests
 
 
 def number_of_subscribers(subreddit):
-    """ Set a custom header user-agent """
-    headers = {"User-Agent": "ALU-scripting API 0.1"}
-    url = "https://www.reddit.com/r/{}.json".format(subreddit)
+    '''
+    Return number of subreddit subscribers
+    '''
+    url = 'https://www.reddit.com/r/{}.json'.format(subreddit)
+    user_agent = 'reddit_user'
 
-    try:
-        response = requests.get(url, headers=headers,
-                                timeout=30, allow_redirects=False)
+    headers = {'User-Agent': "ALU-scripting API 0.1"}
 
-    except requests.exceptions.Timeout:
-        return "The request Timed out"
+    req = requests.get(url, headers=headers, allow_redirects=False)
 
-    if response.status_code == 200:
-        json_data = response.json()
-        subscriber_number = (
-            json_data.get("data")
-            .get("children")[0]
-            .get("data")
-            .get("subreddit_subscribers")
-        )
-        return subscriber_number
-    elif response.status_code == 404:
+    if req.status_code != 200:
         return 0
-    else:
-        return 0
+
+    data = req.json()['data']
+    page_list = data['children']
+    page_data = page_list[0]['data']
+
+    return page_data['subreddit_subscribers']
