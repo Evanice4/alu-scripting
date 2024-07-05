@@ -8,7 +8,7 @@ import requests
 def number_of_subscribers(subreddit):
     """ Set a custom header user-agent """
     headers = {"User-Agent": "My Reddit Subscriber Counter v1.0"}
-    url = f"https://www.reddit.com/r/{subreddit}/about.json?limit=0"
+    url = "https://www.reddit.com/r/{}.json".format(subreddit)
 
     try:
         response = requests.get(url, headers=headers,
